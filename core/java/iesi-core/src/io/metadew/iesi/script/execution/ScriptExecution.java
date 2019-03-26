@@ -216,26 +216,31 @@ public class ScriptExecution
 					break;
 				}
 				
-				if (action.getType().equalsIgnoreCase("fwk.startIteration")) {
-					
-					
-				}
+				
 
 				// Initialize
 				actionExecution.initialize();
 				
 				// Iteration
-				IterationExecution iterationExecution = new IterationExecution();
-				if (!action.getIteration().trim().isEmpty()) {
-					iterationExecution.initialize(this.getFrameworkExecution(), this.getExecutionControl(),
-							this.getExecutionControl().getExecutionRuntime()
-									.getIterationOperation(action.getIteration()));
-				}
-				
-				while (iterationExecution.hasNext()) {
-					if (iterationExecution.getIterationNumber() > 1) actionExecution.initialize();
+				if (action.getType().equalsIgnoreCase("fwk.startIteration")) {
+					IterationExecution iterationExecution = new IterationExecution();
+					if (!action.getIteration().trim().isEmpty()) {
+						iterationExecution.initialize(this.getFrameworkExecution(), this.getExecutionControl(),
+								this.getExecutionControl().getExecutionRuntime()
+										.getIterationOperation(action.getIteration()));
+					}
+
+					while (iterationExecution.hasNext()) {
+						if (iterationExecution.getIterationNumber() > 1) actionExecution.initialize();
+						actionExecution.execute();
+					}
+					
+				} else {
 					actionExecution.execute();
 				}
+				
+				
+				
 				
 				// Stop on Error
 				if (action.getErrorStop().equalsIgnoreCase("y") && action.getErrorExpected().equalsIgnoreCase("n")
