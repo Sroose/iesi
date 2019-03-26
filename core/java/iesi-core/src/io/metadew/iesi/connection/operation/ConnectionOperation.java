@@ -254,6 +254,10 @@ public class ConnectionOperation {
 	
 				SqliteDatabaseConnection dcSQConnection = new SqliteDatabaseConnection(filePath + File.separator + fileName);
 				databaseConnection = objectMapper.convertValue(dcSQConnection, DatabaseConnection.class);
+			} else {
+
+				String message = "Database type is not (yet) supported: " + connection.getType();
+				throw new RuntimeException(message);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(),e);
